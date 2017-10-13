@@ -35,6 +35,7 @@ class color:
 print color.BOLD + color.RED + """
 XssPy - Finding XSS made easier
 Author: Faizan Ahmad (Fsecurify)
+Modified: Robin Graf
 Email: fsecurify@gmail.com
 Usage: XssPy.py website.com (Not www.website.com OR http://www.website.com)
 Comprehensive Scan: python XssPy.py -u website.com -e
@@ -156,10 +157,14 @@ def findxss(firstDomains):
     # starting finding XSS
     color.log(logging.INFO, color.GREEN, 'Started finding XSS')
     if firstDomains:    # if there is atleast one link
+        n = 0
+        k = len(firstDomains)
         for link in firstDomains:
+            n += 1
             blacklisted = False
             y = str(link)
             color.log(logging.DEBUG, color.YELLOW, str(link))
+            color.log(logging.DEBUG, color.YELLOW, (str(n) + "/" + str(k)))
             for ext in blacklist:
                 if ext in y:
                     color.log(logging.DEBUG, color.RED,
