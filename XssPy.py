@@ -202,22 +202,23 @@ def findxss(firstDomains):
                   '\tNo link found, exiting')
 
 def loginpage():
-    color.log(logging.DEBUG, color.GREEN, "would you like to login to a page?(y/N)")
-    answer = str(input())
+    print color.BOLD + color.BLUE + "would you like to login to a page?(y/N)"
+    answer = str(raw_input())
     if answer == "y" or answer == "Y":
-        color.log(logging.DEBUG, color.GREEN, "what page contains the login?")
-        logpage = str(input())
-        color.log(logging.DEBUG, color.GREEN, "what is the form field name?(usually loginform or somthing like that)")
-        loginform = str(input())
-        color.log(logging.DEBUG, color.GREEN, "what is the username field name?(usually name or email)")
-        namefield = str(input())
-        color.log(logging.DEBUG, color.GREEN, "what is the password field name?(usually password)")
-        passwordfield = str(input())
-        color.log(logging.DEBUG, color.GREEN, "what is the login username?")
-        name = str(input())
-        color.log(logging.DEBUG, color.GREEN, "what is the login password?")
+        print color.BOLD + color.BLUE + "what page contains the login?"
+        logpage = str(raw_input())
+        print color.BOLD + color.BLUE + "what is the form field name?(usually loginform or somthing like that)"
+        loginform = str(raw_input())
+        print color.BOLD + color.BLUE + "what is the username field name?(usually name or email)"
+        namefield = str(raw_input())
+        print color.BOLD + color.BLUE + "what is the password field name?(usually password)"
+        passwordfield = str(raw_input())
+        print color.BOLD + color.BLUE + "what is the login username?"
+        name = str(raw_input())
+        print color.BOLD + color.BLUE + "what is the login password?"
         passw = getpass.getpass()
-        try:
+        print passw
+        try:  # try to get the url given the simple url
             test = httplib.HTTPSConnection(logpage)
             test.request("GET", "/")
             response = test.getresponse()
@@ -232,16 +233,18 @@ def loginpage():
             logpage = "http://www." + str(logpage)
         try:  # try to login
             br.open(str(logpage))
-            br.select_form(name=loginform)
+            color.log(logging.DEBUG, color.YELLOW, "Opened login-page")
+            br.select_form(nr = 0)
+            color.log(logging.DEBUG, color.YELLOW, "Opened form")
             br[namefield] = name
             br[passwordfield] = passw
+            color.log(logging.DEBUG, color.YELLOW, "entered details")
             res = br.submit()
+            color.log(logging.DEBUG, color.YELLOW, "submitted form")
 
 
         except:
-            color.log(logging.DEBUG, color.GREEN, "could'nt log-in")
-
-
+            color.log(logging.INFO, color.RED, "could'nt log-in")
 
 
 # calling the function
