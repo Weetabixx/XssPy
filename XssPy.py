@@ -117,7 +117,6 @@ def initializeAndFind():
                 url = "http://www." + str(url)
         except:
             url = "http://www." + str(url)
-        url = "https://xssvulnerablepage-weetabixx.c9users.io/"  # temp remove this
         firstDomains.append(url)
         try:
             br.open(url)
