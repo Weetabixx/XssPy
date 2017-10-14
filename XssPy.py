@@ -187,10 +187,14 @@ def findxss(firstDomains):
                                     testPayload(item, p, link)
                 except:
                     pass
-        color.log(logging.DEBUG, color.GREEN + color.BOLD,
-                  'The following links are vulnerable: ')
-        for link in xssLinks:        # print all xss findings
-            color.log(logging.DEBUG, color.GREEN, '\t' + link)
+        if xssLinks == []:
+            color.log(logging.DEBUG, color.GREEN + color.BOLD,
+                      'There were no vulnerable links found ')
+        else:
+            color.log(logging.DEBUG, color.GREEN + color.BOLD,
+                      'The following links are vulnerable: ')
+            for link in xssLinks:        # print all xss findings
+                color.log(logging.DEBUG, color.GREEN, '\t' + link)
     else:
         color.log(logging.INFO, color.RED + color.BOLD,
                   '\tNo link found, exiting')
