@@ -117,6 +117,8 @@ def initializeAndFind():
                 url = "http://www." + str(url)
         except:
             url = "http://www." + str(url)
+        url = "https://xssvulnerablepage-weetabixx.c9users.io/"  # temp remove this
+        firstDomains.append(url)
         try:
             br.open(url)
             for cookie in results.cookies:
@@ -198,6 +200,10 @@ def findxss(firstDomains):
     else:
         color.log(logging.INFO, color.RED + color.BOLD,
                   '\tNo link found, exiting')
+
+def loginpage():
+    color.log(logging.DEBUG, color.GREEN, "what page contains the login?")
+
 
 
 # calling the function
