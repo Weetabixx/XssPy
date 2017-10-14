@@ -4,6 +4,7 @@ import httplib
 import argparse
 import logging
 from urlparse import urlparse
+import getpass
 
 br = mechanize.Browser()  # initiating the browser
 br.addheaders = [
@@ -201,10 +202,49 @@ def findxss(firstDomains):
                   '\tNo link found, exiting')
 
 def loginpage():
-    color.log(logging.DEBUG, color.GREEN, "what page contains the login?")
+    color.log(logging.DEBUG, color.GREEN, "would you like to login to a page?(y/N)")
+    answer = str(input())
+    if answer == "y" or answer == "Y":
+        color.log(logging.DEBUG, color.GREEN, "what page contains the login?")
+        logpage = str(input())
+        color.log(logging.DEBUG, color.GREEN, "what is the form field name?(usually loginform or somthing like that)")
+        loginform = str(input())
+        color.log(logging.DEBUG, color.GREEN, "what is the username field name?(usually name or email)")
+        namefield = str(input())
+        color.log(logging.DEBUG, color.GREEN, "what is the password field name?(usually password)")
+        passwordfield = str(input())
+        color.log(logging.DEBUG, color.GREEN, "what is the login username?")
+        name = str(input())
+        color.log(logging.DEBUG, color.GREEN, "what is the login password?")
+        passw = getpass.getpass()
+        try:
+            test = httplib.HTTPSConnection(logpage)
+            test.request("GET", "/")
+            response = test.getresponse()
+            if (response.status == 200) | (response.status == 302):
+                logpage = "https://www." + str(logpage)
+            elif response.status == 301:
+                loc = response.getheader('Location')
+                logpage = loc.scheme + '://' + loc.netloc
+            else:
+                logpage = "http://www." + str(logpage)
+        except:
+            logpage = "http://www." + str(logpage)
+        try:  # try to login
+            br.open(str(logpage))
+            br.select_form(name=loginform)
+            br[namefield] = name
+            br[passwordfield] = passw
+            res = br.submit()
+
+
+        except:
+            color.log(logging.DEBUG, color.GREEN, "could'nt log-in")
+
 
 
 
 # calling the function
+loginpage()
 firstDomains = initializeAndFind()
 findxss(firstDomains)
