@@ -202,22 +202,14 @@ def findxss(firstDomains):
                   '\tNo link found, exiting')
 
 def loginpage():
-    print color.BOLD + color.BLUE + "would you like to login to a page?(y/N)" + color.END
+    print color.BOLD + color.BLUE + "would you like to login to a page?(y/N)"
     answer = str(raw_input())
-    if answer == "y" or answer == "Y":
+    print answer
+    if answer == "y" or answer == "Y" or True:
+
         print color.BOLD + color.BLUE + "what page contains the login?" + color.END
         logpage = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the form field name?(usually loginform or somthing like that)" + color.END
-        loginform = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the username field name?(usually name or email)" + color.END
-        namefield = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the password field name?(usually password)" + color.END
-        passwordfield = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the login username?" + color.END
-        name = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the login password?" + color.END
-        passw = getpass.getpass()
-        print passw
+
         try:  # try to get the url given the simple url
             test = httplib.HTTPSConnection(logpage)
             test.request("GET", "/")
@@ -231,11 +223,31 @@ def loginpage():
                 logpage = "http://www." + str(logpage)
         except:
             logpage = "http://www." + str(logpage)
+
         try:  # try to login
             br.open(str(logpage))
             color.log(logging.DEBUG, color.YELLOW, "Opened login-page")
+        except:
+            color.log(logging.DEBUG, color.YELLOW, "couldnt open login-page")
+
+        print color.BOLD + color.BLUE + "what is the form field name?(usually loginform or somthing like that)" + color.END
+        loginform = str(raw_input())
+
+        try:  # try to open the login form
             br.select_form(name=loginform)
             color.log(logging.DEBUG, color.YELLOW, "Opened form")
+        except:
+            color.log(logging.DEBUG, color.YELLOW, "couldnt open form")
+
+        print color.BOLD + color.BLUE + "what is the username field name?(usually name or email)" + color.END
+        namefield = str(raw_input())
+        print color.BOLD + color.BLUE + "what is the password field name?(usually password)" + color.END
+        passwordfield = str(raw_input())
+        print color.BOLD + color.BLUE + "what is the login username?" + color.END
+        name = str(raw_input())
+        print color.BOLD + color.BLUE + "what is the login password?" + color.END
+        passw = getpass.getpass()
+        try:  # try to login using provided details
             br[namefield] = name
             br[passwordfield] = passw
             color.log(logging.DEBUG, color.YELLOW, "entered details")
