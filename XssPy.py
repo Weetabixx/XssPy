@@ -202,20 +202,20 @@ def findxss(firstDomains):
                   '\tNo link found, exiting')
 
 def loginpage():
-    print color.BOLD + color.BLUE + "would you like to login to a page?(y/N)"
+    print color.BOLD + color.BLUE + "would you like to login to a page?(y/N)" + color.END
     answer = str(raw_input())
     if answer == "y" or answer == "Y":
-        print color.BOLD + color.BLUE + "what page contains the login?"
+        print color.BOLD + color.BLUE + "what page contains the login?" + color.END
         logpage = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the form field name?(usually loginform or somthing like that)"
+        print color.BOLD + color.BLUE + "what is the form field name?(usually loginform or somthing like that)" + color.END
         loginform = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the username field name?(usually name or email)"
+        print color.BOLD + color.BLUE + "what is the username field name?(usually name or email)" + color.END
         namefield = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the password field name?(usually password)"
+        print color.BOLD + color.BLUE + "what is the password field name?(usually password)" + color.END
         passwordfield = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the login username?"
+        print color.BOLD + color.BLUE + "what is the login username?" + color.END
         name = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the login password?"
+        print color.BOLD + color.BLUE + "what is the login password?" + color.END
         passw = getpass.getpass()
         print passw
         try:  # try to get the url given the simple url
@@ -234,7 +234,7 @@ def loginpage():
         try:  # try to login
             br.open(str(logpage))
             color.log(logging.DEBUG, color.YELLOW, "Opened login-page")
-            br.select_form(nr = 0)
+            br.select_form(name=loginform)
             color.log(logging.DEBUG, color.YELLOW, "Opened form")
             br[namefield] = name
             br[passwordfield] = passw
