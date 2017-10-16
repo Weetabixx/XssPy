@@ -205,8 +205,8 @@ def loginpage():
     print color.BOLD + color.BLUE + "would you like to login to a page?(y/N)"
     answer = str(raw_input())
     print answer
-    if answer == "y" or answer == "Y" or True:
-
+    failed = not(answer == "y" or answer == "Y")
+    if not failed:
         print color.BOLD + color.BLUE + "what page contains the login?" + color.END
         logpage = str(raw_input())
 
@@ -225,41 +225,48 @@ def loginpage():
             logpage = "http://www." + str(logpage)
 
         try:  # try to login
-            br.open(str(logpage))
+            r = br.open(str(logpage))
             color.log(logging.DEBUG, color.YELLOW, "Opened login-page")
+            print r.read()
+            if br.forms():
+                for form in list(br.forms()):
+                    print "Form name:" + form.name
+                    print form
+            else:
+                print "no forms on this page sorry."
         except:
             color.log(logging.DEBUG, color.YELLOW, "couldnt open login-page")
+            failed = True
+        if not failed:
+            print color.BOLD + color.BLUE + "what is the form field name?(usually loginform or somthing like that)" + color.END
+            loginform = str(raw_input())
 
-        print color.BOLD + color.BLUE + "what is the form field name?(usually loginform or somthing like that)" + color.END
-        loginform = str(raw_input())
-
-        try:  # try to open the login form
-            br.select_form(name=loginform)
-            color.log(logging.DEBUG, color.YELLOW, "Opened form")
-        except:
-            color.log(logging.DEBUG, color.YELLOW, "couldnt open form")
-
-        print color.BOLD + color.BLUE + "what is the username field name?(usually name or email)" + color.END
-        namefield = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the password field name?(usually password)" + color.END
-        passwordfield = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the login username?" + color.END
-        name = str(raw_input())
-        print color.BOLD + color.BLUE + "what is the login password?" + color.END
-        passw = getpass.getpass()
-        try:  # try to login using provided details
-            br[namefield] = name
-            br[passwordfield] = passw
-            color.log(logging.DEBUG, color.YELLOW, "entered details")
-            res = br.submit()
-            color.log(logging.DEBUG, color.YELLOW, "submitted form")
-
-
-        except:
-            color.log(logging.INFO, color.RED, "could'nt log-in")
+            try:  # try to open the login form
+                br.select_form(name=loginform)
+                color.log(logging.DEBUG, color.YELLOW, "Opened form")
+            except:
+                color.log(logging.DEBUG, color.YELLOW, "couldnt open form")
+                failed = True
+            if not failed:
+                print color.BOLD + color.BLUE + "what is the username field name?(usually name or email)" + color.END
+                namefield = str(raw_input())
+                print color.BOLD + color.BLUE + "what is the password field name?(usually password)" + color.END
+                passwordfield = str(raw_input())
+                print color.BOLD + color.BLUE + "what is the login username?" + color.END
+                name = str(raw_input())
+                print color.BOLD + color.BLUE + "what is the login password?" + color.END
+                passw = getpass.getpass()
+                try:  # try to login using provided details
+                    br[namefield] = name
+                    br[passwordfield] = passw
+                    color.log(logging.DEBUG, color.YELLOW, "entered details")
+                    res = br.submit()
+                    color.log(logging.DEBUG, color.YELLOW, "submitted form")
+                except:
+                    color.log(logging.INFO, color.RED, "could'nt log-in")
 
 
 # calling the function
-loginpage()
+loginpage()  # note; login does not work on pages that generate the form using javascript :(
 firstDomains = initializeAndFind()
 findxss(firstDomains)
